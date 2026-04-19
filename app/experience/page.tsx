@@ -105,7 +105,7 @@ const cardVariants = {
     transition: {
       delay: i * 0.09,
       duration: 0.45,
-      ease: [0.16, 1, 0.3, 1],
+      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
     },
   }),
 };
@@ -115,7 +115,7 @@ const summaryVariants = {
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
   },
 };
 

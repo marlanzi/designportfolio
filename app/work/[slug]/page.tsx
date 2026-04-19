@@ -8,8 +8,34 @@ import { motion } from "framer-motion";
 import { Reveal } from "@/components/reveal";
 import { stagger, fadeUp } from "@/lib/motion";
 
+/* ─── Types ────────────────────────────────────────────────────── */
+type Project = {
+  slug: string;
+  index: string;
+  company: string;
+  name: string;
+  tagline: string;
+  year: string;
+  role: string;
+  scope: string;
+  duration: string | null;
+  image?: string | null;
+  video?: string;
+  mockups?: string[];
+  features?: { label: string; heading: string; body: string; image: string }[];
+  overview: string;
+  sections: { label: string; heading: string; body: string }[];
+  outcomes: { metric: string; label: string }[];
+  nextSlug: string;
+  nextName: string;
+  articleLink?: string;
+  illustrationImage?: string;
+  themesGridImage?: string;
+  rouletteImage?: string;
+};
+
 /* ─── Project data ─────────────────────────────────────────────── */
-const PROJECTS = [
+const PROJECTS: Project[] = [
   {
     slug: "tenor-caption",
     index: "01",
