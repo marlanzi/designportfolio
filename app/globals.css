@@ -1,0 +1,222 @@
+@import "tailwindcss";
+
+/* ─── Design Tokens — Dark (default) ────────────────────────── */
+:root {
+  --bg-base:    #0c0c0b;
+  --bg-surface: #111110;
+  --bg-raised:  #171715;
+
+  --text-primary:   #f0ede8;
+  --text-secondary: #9a9690;
+  --text-muted:     #4a4845;
+
+  --accent:       #d4a257;
+  --accent-soft:  #d4a25722;
+  --accent-dim:   #8a6835;
+
+  --border:       #2a2926;
+  --border-soft:  #1e1d1c;
+
+  --font-display: var(--font-inter);
+  --font-mono:    var(--font-geist-mono);
+}
+
+/* ─── Light mode overrides — Relief palette ──────────────────── */
+.light {
+  --bg-base:    #ffffff;
+  --bg-surface: #fafafa;
+  --bg-raised:  #f5f3fb;
+
+  --text-primary:   #111111;
+  --text-secondary: #555555;
+  --text-muted:     #aaaaaa;
+
+  --accent:       #6D60BC;
+  --accent-soft:  #F6EAFD;
+  --accent-dim:   #A4B5F7;
+
+  --border:       #e8e6f0;
+  --border-soft:  #f0eff7;
+}
+
+@theme inline {
+  --color-bg-base:        var(--bg-base);
+  --color-bg-surface:     var(--bg-surface);
+  --color-bg-raised:      var(--bg-raised);
+  --color-text-primary:   var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted:     var(--text-muted);
+  --color-accent:         var(--accent);
+  --color-accent-soft:    var(--accent-soft);
+  --color-accent-dim:     var(--accent-dim);
+  --color-border:         var(--border);
+  --color-border-soft:    var(--border-soft);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* ─── Base ───────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Typography utilities ───────────────────────────────────── */
+.display-xl {
+  font-size: clamp(3rem, 7vw, 8rem);
+  font-weight: 700;
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+}
+
+.display-lg {
+  font-size: clamp(2.5rem, 6vw, 6rem);
+  font-weight: 700;
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+}
+
+.display-md {
+  font-size: clamp(1.75rem, 3.5vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.text-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ─── Layout utilities ───────────────────────────────────────── */
+.container-editorial {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: clamp(1.5rem, 5vw, 5rem);
+}
+
+/* ─── Page entrance ──────────────────────────────────────────── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-fade-up-1 { animation-delay: 0.05s; }
+.animate-fade-up-2 { animation-delay: 0.13s; }
+.animate-fade-up-3 { animation-delay: 0.21s; }
+
+/* ─── Hairline ───────────────────────────────────────────────── */
+.hairline {
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+/* ─── Marquee ────────────────────────────────────────────────── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes marquee-reverse {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+.marquee-track {
+  animation: marquee 42s linear infinite;
+  will-change: transform;
+}
+
+.marquee-track-reverse {
+  animation: marquee-reverse 36s linear infinite;
+  will-change: transform;
+}
+
+.marquee-paused,
+.marquee-paused .marquee-track,
+.marquee-paused .marquee-track-reverse {
+  animation-play-state: paused;
+}
+
+/* ─── Accent gradient text ───────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent) 0%, #f0c97a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.light .gradient-text {
+  background: linear-gradient(135deg, #FF5924 0%, #C850C0 55%, #6D60BC 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Metric accent (outcome cards) ─────────────────────────── */
+.metric-text {
+  color: #7c4dff;
+}
+.light .metric-text {
+  color: #6D60BC;
+}
+
+/* ─── Glass card (mymind-style) ──────────────────────────────── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+:root:not(.light) .glass-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* ─── Gradient section wash ──────────────────────────────────── */
+.gradient-section {
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 100%, rgba(255, 89, 36, 0.09) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 90% 0%,   rgba(200, 80, 192, 0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 50%,  rgba(109, 96, 188, 0.06) 0%, transparent 60%);
+}
+
+:root:not(.light) .gradient-section {
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 100%, rgba(212, 162, 87, 0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 90% 0%,   rgba(109, 96, 188, 0.08) 0%, transparent 55%);
+}
+
+/* ─── Selection ──────────────────────────────────────────────── */
+::selection {
+  background: var(--accent);
+  color: var(--bg-base);
+}
+
+.light ::selection {
+  background: #A4B5F7;
+  color: #111111;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-base); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }

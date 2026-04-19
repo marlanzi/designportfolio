@@ -1,0 +1,34 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <defs>
+    <!-- Mask cuts out where bars pierce the outer ring -->
+    <mask id="ring-mask">
+      <rect width="100" height="100" fill="white"/>
+      <!-- Cut at top (d-bar through ring) -->
+      <rect x="26" y="4" width="10" height="12" fill="black"/>
+      <!-- Cut at bottom (p-bar through ring) -->
+      <rect x="64" y="84" width="10" height="12" fill="black"/>
+    </mask>
+    <!-- Left half clip -->
+    <clipPath id="dp-L"><rect width="50.5" height="100"/></clipPath>
+    <!-- Right half clip -->
+    <clipPath id="dp-R"><rect x="49.5" width="50.5" height="100"/></clipPath>
+  </defs>
+
+  <!-- All stroked shapes — light cyan on left half -->
+  <g stroke="#2EC6FF" stroke-width="7.5" stroke-linecap="round" clip-path="url(#dp-L)">
+    <circle cx="50" cy="50" r="43" mask="url(#ring-mask)"/>
+    <circle cx="30" cy="52" r="13"/>
+    <line x1="30" y1="8" x2="30" y2="39"/>
+    <circle cx="70" cy="52" r="13"/>
+    <line x1="70" y1="65" x2="70" y2="92"/>
+  </g>
+
+  <!-- All stroked shapes — dark blue on right half -->
+  <g stroke="#0047EE" stroke-width="7.5" stroke-linecap="round" clip-path="url(#dp-R)">
+    <circle cx="50" cy="50" r="43" mask="url(#ring-mask)"/>
+    <circle cx="30" cy="52" r="13"/>
+    <line x1="30" y1="8" x2="30" y2="39"/>
+    <circle cx="70" cy="52" r="13"/>
+    <line x1="70" y1="65" x2="70" y2="92"/>
+  </g>
+</svg>
