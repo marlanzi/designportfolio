@@ -48,10 +48,10 @@ export function Footer() {
           {/* Right */}
           <div className="flex flex-col items-start gap-3 sm:items-end">
             <a
-              href="mailto:martinalanzi@gmail.com"
+              href="mailto:mar.lanzi96@gmail.com"
               className="text-sm text-text-secondary hover:text-accent transition-colors duration-200"
             >
-              martinalanzi@gmail.com
+              mar.lanzi96@gmail.com
             </a>
             <a
               href="https://www.linkedin.com/in/martinalanzi"

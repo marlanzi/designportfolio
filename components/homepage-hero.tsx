@@ -119,7 +119,7 @@ export function HomepageHero() {
         animate="visible"
       >
         {/* ── Line 1 — static name, mask reveal ── */}
-        <div className="overflow-hidden" style={{ paddingBottom: "6px", paddingTop: "8px" }}>
+        <div className="overflow-hidden" style={{ paddingBottom: "16px", paddingTop: "8px" }}>
           <motion.p
             custom={0}
             variants={lineReveal}
