@@ -119,22 +119,24 @@ export function HomepageHero() {
         animate="visible"
       >
         {/* ── Line 1 — static name, mask reveal ── */}
-        <div className="overflow-hidden" style={{ paddingBottom: "16px", paddingTop: "8px" }}>
+        <div className="overflow-hidden" style={{ paddingTop: "8px" }}>
           <motion.p
             custom={0}
             variants={lineReveal}
             className="display-xl text-text-primary"
+            style={{ paddingBottom: "0.18em" }}
           >
             I&apos;m Martina Lanzi,
           </motion.p>
         </div>
 
         {/* ── Line 2 — cycling phrase ── */}
-        <div className="overflow-hidden" style={{ paddingBottom: "32px", paddingTop: "8px" }}>
+        <div className="overflow-hidden" style={{ paddingBottom: "32px", paddingTop: "4px" }}>
           <AnimatePresence mode="wait">
             <motion.p
               key={index}
               className="display-xl gradient-text"
+              style={{ paddingBottom: "0.22em" }}
               initial={{ y: "108%" }}
               animate={{ y: "0%" }}
               exit={{
