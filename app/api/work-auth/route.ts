@@ -5,7 +5,7 @@ const COOKIE = "portfolio-auth";
 
 export async function POST(req: NextRequest) {
   const { password } = await req.json();
-  const expected = process.env.PORTFOLIO_PASSWORD ?? "martina2025";
+  const expected = process.env.PORTFOLIO_PASSWORD ?? "martina2026";
 
   if (password !== expected) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

@@ -14,7 +14,7 @@ export function proxy(req: NextRequest) {
   if (!isProtected) return NextResponse.next();
 
   const token = req.cookies.get(COOKIE)?.value;
-  const expected = process.env.PORTFOLIO_PASSWORD ?? "martina2025";
+  const expected = process.env.PORTFOLIO_PASSWORD ?? "martina2026";
 
   if (token === expected) return NextResponse.next();
 
