@@ -326,7 +326,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
                 className="border border-border rounded-xl px-6 py-5 bg-bg-surface"
               >
                 <p
-                  className="metric-text font-bold mb-1.5"
+                  className="gradient-text font-bold mb-1.5"
                   style={{ fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)", letterSpacing: "-0.04em", lineHeight: 1 }}
                 >
                   {outcome.metric}
@@ -468,6 +468,26 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
           </Reveal>
         </div>
       )}
+
+      {/* ── Process phases ── */}
+      <div className="container-editorial pb-16">
+        <hr className="hairline mb-10" />
+        <Reveal>
+          <div className="flex flex-wrap items-center gap-3">
+            <p className="text-label shrink-0">Process</p>
+            <div className="flex flex-wrap items-center gap-2">
+              {project.sections.map((section, i) => (
+                <span key={i} className="flex items-center gap-2">
+                  {i > 0 && <span className="text-text-muted text-xs" aria-hidden="true">→</span>}
+                  <span className="text-xs px-3 py-1.5 rounded-full border border-border text-text-secondary">
+                    {section.label}
+                  </span>
+                </span>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+      </div>
 
       {/* ── Overview ── */}
       <div className="container-editorial pb-24">

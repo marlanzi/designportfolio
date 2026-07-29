@@ -12,10 +12,11 @@ const PROJECTS = [
     company: "C+E Studio · Google",
     name: "Tenor Creator Experience",
     tagline: "The world's largest GIF keyboard — and its creator tools were holding it back.",
-    outcome: "Redesigned creator flow with Dynamic Text captioning, universal search, and 3 upload paths.",
+    stat: "0→1",
+    statLabel: "Dynamic Text captioning introduced to Tenor",
     year: "2022–2023",
+    role: "Sr. Product Designer",
     tags: ["Creator Tools", "Feature Definition", "Mobile UX", "Wireframing"],
-    accent: "#00b4d8",
   },
   {
     slug: "google-notes",
@@ -23,10 +24,11 @@ const PROJECTS = [
     company: "C+E Studio · Google",
     name: "Notes by Google",
     tagline: "Turned a creative production gap into a system — removing the designer from the middle.",
-    outcome: "Figma plugin put CCS assets directly in the hands of iOS and AGA engineers.",
+    stat: "100%",
+    statLabel: "Theme export fidelity via JSON — no detail lost in handoff",
     year: "2023",
+    role: "Sr. Product Designer",
     tags: ["Plugin Dev", "Theming", "Cross-team Collab", "Interaction Design"],
-    accent: "#7c4dff",
   },
   {
     slug: "google-dynamic-text",
@@ -34,10 +36,11 @@ const PROJECTS = [
     company: "C+E Studio · Google",
     name: "Dynamic Text",
     tagline: "Typed phrases turned into animated, expressive assets — shipped across Gboard and YouTube Create.",
-    outcome: "~3.5M assets shared per day. 78% CTR. 1.2B Dynamic Text shares in 2023.",
+    stat: "1.2B",
+    statLabel: "Dynamic Text shares in 2023 · 78% CTR",
     year: "2022–2024",
+    role: "Sr. Product Designer",
     tags: ["Gboard", "YouTube Create", "Content UX", "Localization", "Competitive Research"],
-    accent: "#4285f4",
   },
   {
     slug: "santander",
@@ -45,10 +48,11 @@ const PROJECTS = [
     company: "Santander",
     name: "Digital Help Center",
     tagline: "Santander's support model was branch-first, by default. We changed that.",
-    outcome: "6.7% reduction in contact ratio — 77,545 fewer contacts/month.",
+    stat: "6.7%",
+    statLabel: "Reduction in contact ratio — 77,545 fewer contacts/month",
     year: "2021",
+    role: "UX Designer",
     tags: ["Information Architecture", "Web & Mobile", "Salesforce", "Stakeholder Workshops"],
-    accent: "#ec0000",
   },
   {
     slug: "quentro",
@@ -56,10 +60,11 @@ const PROJECTS = [
     company: "Quentro",
     name: "Event Ticketing App",
     tagline: "Most users never made it past the first screen. We diagnosed and rebuilt from there.",
-    outcome: "Reduced first-use abandonment. Rebuilt onboarding and ticket discovery flow.",
+    stat: "8",
+    statLabel: "Moderated usability sessions → rebuilt onboarding & discovery",
     year: "2019",
+    role: "UX Designer",
     tags: ["Mobile UX", "Onboarding", "Usability Testing", "Conversion"],
-    accent: "#00e5ff",
   },
 ];
 
@@ -97,35 +102,41 @@ export default function WorkPage() {
                 className="group block border-b border-border py-10 transition-colors duration-200"
                 aria-label={`${project.company} — ${project.name}`}
               >
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-[3rem_1fr_1fr_auto]">
+                {/* Top row: index + content + stat + arrow */}
+                <div className="flex items-start gap-6">
                   {/* Index */}
-                  <span className="text-label pt-1 hidden lg:block" aria-hidden="true">
+                  <span className="text-label pt-1 hidden lg:block shrink-0 w-12" aria-hidden="true">
                     {project.index}
                   </span>
 
-                  {/* Name + company */}
-                  <div>
-                    <p className="text-xs text-text-muted mb-2">{project.company} · {project.year}</p>
-                    <h2
-                      className="font-bold text-text-primary group-hover:text-accent transition-colors duration-300 leading-tight"
-                      style={{ fontSize: "clamp(1.25rem, 2vw, 1.75rem)", letterSpacing: "-0.025em" }}
-                    >
-                      {project.name}
-                    </h2>
-                  </div>
-
-                  {/* Tagline + outcome */}
-                  <div className="flex flex-col gap-3">
-                    <p className="text-sm text-text-secondary leading-relaxed">
+                  {/* Name + company + tagline + tags */}
+                  <div className="flex-1 min-w-0 flex flex-col gap-3">
+                    <div>
+                      <p className="text-xs text-text-muted mb-2">{project.company} · {project.role} · {project.year}</p>
+                      <h2
+                        className="font-bold text-text-primary group-hover:text-accent transition-colors duration-300 leading-tight"
+                        style={{ fontSize: "clamp(1.25rem, 2vw, 1.75rem)", letterSpacing: "-0.025em" }}
+                      >
+                        {project.name}
+                      </h2>
+                    </div>
+                    <p className="text-sm text-text-secondary leading-relaxed max-w-lg">
                       {project.tagline}
                     </p>
-                    <p className="text-xs text-accent leading-relaxed">
-                      ↳ {project.outcome}
-                    </p>
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-xs px-2.5 py-1 rounded-full border border-border text-text-muted"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Arrow */}
-                  <div className="flex items-start justify-end pt-1">
+                  <div className="hidden lg:flex items-start pt-1 shrink-0">
                     <span
                       className="text-text-muted group-hover:text-accent group-hover:translate-x-1 transition-all duration-300"
                       aria-hidden="true"
@@ -133,18 +144,6 @@ export default function WorkPage() {
                       →
                     </span>
                   </div>
-                </div>
-
-                {/* Tags */}
-                <div className="mt-6 flex flex-wrap gap-2 lg:ml-[calc(3rem+1.5rem)]">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-xs px-2.5 py-1 rounded-full border border-border text-text-muted"
-                    >
-                      {tag}
-                    </span>
-                  ))}
                 </div>
               </Link>
             </li>

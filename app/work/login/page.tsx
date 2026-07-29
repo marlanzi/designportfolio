@@ -29,8 +29,7 @@ function LoginForm() {
     });
 
     if (res.ok) {
-      router.push(from);
-      router.refresh();
+      window.location.href = from;
     } else {
       setError(true);
       setLoading(false);
