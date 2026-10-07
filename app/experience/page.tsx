@@ -89,13 +89,6 @@ const CERTIFICATIONS = [
   { name: "Figma MCP and Cursor Workshop", issuer: "Memorisely", year: "2025" },
 ];
 
-const SKILLS = [
-  { category: "Design", items: ["Product Design", "UX Research", "Design Systems", "Information Architecture", "Interaction Design", "Prototyping", "Usability Testing"] },
-  { category: "Methods", items: ["Stakeholder Workshops", "Co-creation", "Competitive Analysis", "SWOT", "User Interviews", "Flow Mapping"] },
-  { category: "Tools", items: ["Figma", "FigJam", "Maze", "Notion", "Jira", "Miro", "Zeplin"] },
-  { category: "Domains", items: ["Fintech", "Consumer Apps", "Enterprise SaaS", "Public Safety", "Education"] },
-];
-
 /* ─── Motion variants ───────────────────────────────────────────── */
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -323,29 +316,6 @@ export default function ExperiencePage() {
                 </motion.div>
               ))}
             </div>
-          </div>
-        </div>
-      </div>
-
-      <hr className="hairline" />
-
-      {/* ── Skills ── */}
-      <div className="bg-bg-surface py-20">
-        <div className="container-editorial">
-          <Reveal><p className="text-label mb-12">Capabilities</p></Reveal>
-          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-            {SKILLS.map((group) => (
-              <Reveal key={group.category}>
-                <div className="flex flex-col gap-4">
-                  <p className="text-xs font-semibold text-text-primary">{group.category}</p>
-                  <ul className="flex flex-col gap-2">
-                    {group.items.map((item) => (
-                      <li key={item} className="text-sm text-text-secondary">{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              </Reveal>
-            ))}
           </div>
         </div>
       </div>

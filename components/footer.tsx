@@ -2,92 +2,82 @@
 
 import Link from "next/link";
 
-const MARQUEE_ITEMS = [
-  "Product Design",
-  "Systems Thinking",
-  "UX Strategy",
-  "Information Architecture",
-  "Design Leadership",
-  "Interaction Design",
-  "User Research",
-  "Design Systems",
+const NAV = [
+  { href: "/work", label: "Work" },
+  { href: "/about", label: "About" },
+  { href: "/experience", label: "Experience" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export function Footer() {
-  const items = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
-
   return (
     <footer className="border-t border-border">
-      {/* Marquee strip */}
-      <div className="overflow-hidden border-b border-border py-3">
-        <div className="marquee-track flex gap-10 whitespace-nowrap">
-          {items.map((item, i) => (
+      <div className="container-editorial pt-28 pb-10 lg:pt-40">
+        {/* Closing statement */}
+        <Link href="/contact" className="group block" aria-label="Get in touch — let's make it clearer">
+          <p className="display-statement text-text-primary">
+            Have a complex
+            <br />
+            product problem?
+          </p>
+          <p className="display-statement mt-2 text-text-muted transition-colors duration-500 group-hover:text-text-primary">
+            Let&rsquo;s make it clearer.{" "}
             <span
-              key={i}
-              className="flex shrink-0 items-center gap-10 text-xs text-text-muted tracking-widest uppercase"
+              aria-hidden="true"
+              className="inline-block transition-transform duration-500 group-hover:translate-x-3 motion-reduce:transition-none"
             >
-              {item}
-              <span className="text-accent" aria-hidden="true">◆</span>
+              →
             </span>
-          ))}
-        </div>
-      </div>
+          </p>
+        </Link>
 
-      {/* Footer body */}
-      <div className="container-editorial py-14">
-        <div className="flex flex-col gap-10 sm:flex-row sm:items-end sm:justify-between">
-          {/* Left */}
-          <div className="flex flex-col gap-4">
-            <p className="text-label">Based in Buenos Aires · Open to global roles</p>
-            <p className="display-md text-text-primary" style={{ fontSize: "clamp(1.5rem, 3vw, 2.5rem)" }}>
-              Let&apos;s make something<br />
-              <span className="gradient-text">worth remembering.</span>
-            </p>
-          </div>
-
-          {/* Right */}
-          <div className="flex flex-col items-start gap-3 sm:items-end">
+        <div className="mt-20 grid gap-10 border-t border-border pt-6 lg:mt-28 lg:grid-cols-12">
+          <div className="flex flex-col gap-4 lg:col-span-5">
+            <p className="text-label">Email</p>
             <a
               href="mailto:mar.lanzi96@gmail.com"
-              className="text-sm text-text-secondary hover:text-accent transition-colors duration-200"
+              className="w-fit border-b border-transparent text-xl font-medium tracking-[-0.02em] text-text-primary transition-colors duration-300 hover:border-current lg:text-2xl"
             >
               mar.lanzi96@gmail.com
             </a>
+          </div>
+          <div className="flex flex-col gap-4 lg:col-span-3">
+            <p className="text-label">Elsewhere</p>
             <a
               href="https://www.linkedin.com/in/martinalanzi"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-text-secondary hover:text-accent transition-colors duration-200"
+              className="w-fit text-sm text-text-secondary transition-colors duration-300 hover:text-text-primary"
             >
               LinkedIn ↗
             </a>
           </div>
+          <div className="flex flex-col gap-4 lg:col-span-3 lg:col-start-10">
+            <p className="text-label">Availability</p>
+            <p className="text-sm leading-relaxed text-text-secondary">
+              Available for selected freelance projects and product opportunities.
+            </p>
+          </div>
         </div>
 
-        <hr className="hairline my-10" />
-
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-text-muted">
-            © {new Date().getFullYear()} Martina Lanzi. All rights reserved.
-          </p>
-          <nav aria-label="Footer navigation">
-            <ul className="flex gap-5" role="list">
-              {[
-                { href: "/work", label: "Work" },
-                { href: "/about", label: "About" },
-                { href: "/contact", label: "Contact" },
-              ].map(({ href, label }) => (
+        <div className="mt-20 grid gap-8 border-t border-border pt-6 text-sm lg:grid-cols-12">
+          <div className="flex flex-col lg:col-span-5">
+            <span className="font-medium text-text-primary">Martina Lanzi</span>
+            <span className="text-text-secondary">Product Designer</span>
+            <span className="text-text-secondary">Buenos Aires · Worldwide</span>
+          </div>
+          <nav aria-label="Footer navigation" className="lg:col-span-4">
+            <ul className="flex flex-wrap gap-x-6 gap-y-2" role="list">
+              {NAV.map(({ href, label }) => (
                 <li key={href}>
-                  <Link
-                    href={href}
-                    className="text-xs text-text-muted hover:text-text-secondary transition-colors duration-200"
-                  >
+                  <Link href={href} className="text-text-secondary transition-colors duration-200 hover:text-text-primary">
                     {label}
                   </Link>
                 </li>
               ))}
             </ul>
           </nav>
+          <p className="text-text-muted lg:col-span-3 lg:text-right">© {new Date().getFullYear()} Martina Lanzi</p>
         </div>
       </div>
     </footer>
