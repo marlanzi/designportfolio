@@ -5,14 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Reveal } from "@/components/reveal";
-
-const SKILLS = [
-  "Product Design", "UX Research", "Design Systems", "Information Architecture",
-  "Interaction Design", "Prototyping", "Usability Testing", "Stakeholder Workshops",
-  "Mobile & Web Design", "Figma",
-];
-
-const TOOLS = ["Figma", "FigJam", "Maze", "Notion", "Jira", "Miro", "Zeplin"];
+import { BloomingPortrait } from "@/components/blooming-portrait";
+import { TechStack } from "@/components/tech-stack";
 
 const ALL_ART = [
   { src: "/art/art-1.jpg", title: "Studio works",         aspect: "16/9" },
@@ -56,23 +50,9 @@ export default function AboutPage() {
 
       {/* Bio section */}
       <div className="container-editorial pt-8 pb-16">
-        <div className="grid gap-16 lg:grid-cols-[400px_1fr] lg:items-start">
-          {/* Photo */}
-          <Reveal>
-            <div
-              className="overflow-hidden rounded-2xl bg-bg-surface"
-              style={{ aspectRatio: "3/4", maxWidth: 400 }}
-            >
-              <Image
-                src="/martina.png"
-                alt="Martina Lanzi"
-                width={400}
-                height={533}
-                className="w-full h-full object-cover"
-                priority
-              />
-            </div>
-          </Reveal>
+        <div className="grid gap-16 lg:grid-cols-[460px_1fr] lg:items-start">
+          {/* Photo — the flowers are live layers (see BloomingPortrait) */}
+          <BloomingPortrait className="mx-auto max-w-[460px] lg:mx-0" />
 
           {/* Text */}
           <div className="flex flex-col gap-10">
@@ -81,58 +61,35 @@ export default function AboutPage() {
                 className="text-text-primary font-bold leading-tight"
                 style={{ fontSize: "clamp(1.5rem, 2.5vw, 2.25rem)", letterSpacing: "-0.03em" }}
               >
-                Product designer & UX strategist
+                Product Designer & UX Strategist
               </h2>
             </Reveal>
 
             <Reveal delay={0.06}>
               <div className="flex flex-col gap-4">
                 <p className="text-text-secondary leading-relaxed">
-                  Specializing in product design and user experience, I bring a
-                  human-centered approach to everything I create. My work bridges
-                  strategy, design systems and storytelling — transforming complex
-                  problems into simple, intuitive and visually engaging experiences.
+                  I&apos;m a Product Designer who loves turning complex problems into
+                  experiences that feel simple, thoughtful and intuitive. I work across
+                  strategy, UX, visual design and design systems, always balancing what
+                  users need with what makes sense for the product.
                 </p>
                 <p className="text-text-secondary leading-relaxed">
-                  Whether I&apos;m designing for fintech, public safety or education,
-                  my goal is always the same: to humanize technology and create
-                  products that feel both useful and alive.
+                  I&apos;ve designed products across fintech, public safety, education and
+                  more, collaborating closely with product and engineering teams from
+                  early exploration to final execution.
+                </p>
+                <p className="text-text-secondary leading-relaxed">
+                  I&apos;m endlessly curious, always experimenting with new tools and ways
+                  of working, and lately exploring how AI can help me move faster from
+                  idea to prototype. For me, great design isn&apos;t just about making
+                  things easier to use — it&apos;s about making technology feel more human.
                 </p>
               </div>
             </Reveal>
 
-            {/* Skills */}
+            {/* Tech stack */}
             <Reveal delay={0.1}>
-              <div className="flex flex-col gap-4">
-                <p className="text-label">Disciplines</p>
-                <div className="flex flex-wrap gap-2">
-                  {SKILLS.map((skill) => (
-                    <span
-                      key={skill}
-                      className="rounded-full border border-border px-4 py-1.5 text-xs text-text-secondary"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </Reveal>
-
-            {/* Tools */}
-            <Reveal delay={0.14}>
-              <div className="flex flex-col gap-4">
-                <p className="text-label">Tools</p>
-                <div className="flex flex-wrap gap-2">
-                  {TOOLS.map((tool) => (
-                    <span
-                      key={tool}
-                      className="rounded-full border border-accent/30 bg-accent-soft px-4 py-1.5 text-xs text-accent"
-                    >
-                      {tool}
-                    </span>
-                  ))}
-                </div>
-              </div>
+              <TechStack />
             </Reveal>
 
             {/* CTAs */}
@@ -164,31 +121,8 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* Philosophy */}
-      <div className="bg-bg-surface border-y border-border py-24">
-        <div className="container-editorial">
-          <Reveal>
-            <div className="max-w-3xl">
-              <p className="text-label mb-8">Design philosophy</p>
-              <blockquote
-                className="font-bold text-text-primary"
-                style={{
-                  fontSize: "clamp(1.5rem, 3vw, 2.75rem)",
-                  letterSpacing: "-0.03em",
-                  lineHeight: 1.1,
-                }}
-              >
-                &ldquo;Design isn&apos;t just how it looks — it&apos;s how it
-                works, how it feels, and whether it earns trust every time
-                someone uses it.&rdquo;
-              </blockquote>
-            </div>
-          </Reveal>
-        </div>
-      </div>
-
       {/* Art section — marquee */}
-      <div className="py-24">
+      <div className="border-t border-border py-24">
         <Reveal>
           <div className="container-editorial mb-10 flex flex-col gap-3">
             <p className="text-label">Outside the screen</p>

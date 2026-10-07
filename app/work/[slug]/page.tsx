@@ -7,6 +7,20 @@ import { notFound } from "next/navigation";
 import { motion } from "framer-motion";
 import { Reveal } from "@/components/reveal";
 import { stagger, fadeUp } from "@/lib/motion";
+import { UPCOMING_CASE_STUDIES } from "@/lib/projects";
+import { UpcomingCaseStudy } from "@/components/upcoming-case-study";
+import { QuentroCaseStudy } from "@/components/quentro-case-study";
+import { CaseStudyProgress, chapterLabel } from "@/components/case-study-progress";
+import {
+  AtAGlance,
+  CaseImage,
+  GrowthStats,
+  JourneyStrip,
+  KpiCards,
+  PhoneVideo,
+  TestingScorecard,
+  TrafficChart,
+} from "@/components/case-figures";
 
 /* ─── Types ────────────────────────────────────────────────────── */
 type Project = {
@@ -24,7 +38,21 @@ type Project = {
   mockups?: string[];
   features?: { label: string; heading: string; body: string; image: string }[];
   overview: string;
-  sections: { label: string; heading: string; body: string }[];
+  sections: {
+    label: string;
+    heading: string;
+    body: string;
+    points?: string[];
+    figure?: React.ReactNode;
+    /** Put the figure beside the text instead of below it */
+    split?: boolean;
+    /** One-line conclusion shown at the end of the section */
+    takeaway?: string;
+    /** Starts a new part of the story (e.g. Problem / Process / Outcome) */
+    act?: { label: string; title: string };
+  }[];
+  /** Problem / what I did / why it matters, shown under the overview */
+  glance?: { label: string; text: string }[];
   outcomes: { metric: string; label: string }[];
   nextSlug: string;
   nextName: string;
@@ -36,44 +64,6 @@ type Project = {
 
 /* ─── Project data ─────────────────────────────────────────────── */
 const PROJECTS: Project[] = [
-  {
-    slug: "tenor-caption",
-    index: "01",
-    company: "C+E Studio · Google",
-    name: "Tenor Creator Experience",
-    tagline: "Tenor had the scale. The creator tools hadn't kept pace. This was the redesign.",
-    year: "2022–2023",
-    role: "Sr. Product Designer",
-    scope: "Creator Tools · Redesign · Feature Definition · Mobile UX",
-    duration: "8 months",
-    image: "/tenorcreation.png",
-    overview:
-      "Tenor is the world's largest GIF keyboard — billions of shares per year across every major platform. But the creator-facing product had fallen behind. The interface that content creators used to upload, caption, and publish GIFs was functional but unpolished: limited search, static text-only captions, opaque approval flows, and upload constraints that capped quality. This was a focused redesign effort with a clear mandate: uplevel every touchpoint of the creation experience to match the platform's scale and ambition.",
-    sections: [
-      {
-        label: "The Problem",
-        heading: "A product at scale, with a creator experience that hadn't scaled with it.",
-        body: "The friction was specific and accumulated: cross-source searching was limited, editing capabilities were restricted, captions were static and text-only, upload sizes were constrained, and there was no visibility into the approval process. The result was a creator experience that asked more than it gave — one that had been extended over time without a cohesive UX layer holding it together.",
-      },
-      {
-        label: "Redesign Scope",
-        heading: "Audit the full journey before touching a single screen.",
-        body: "Before wireframing anything, I mapped the end-to-end creator flow — from content discovery through upload, captioning, and publish — cataloguing every friction point, unclear state, and missed opportunity. The audit made clear that the problems weren't isolated bugs: they reflected a product that needed structural and surface-level attention simultaneously.",
-      },
-      {
-        label: "Execution",
-        heading: "Expressive captions, unified search, three coherent creation paths.",
-        body: "The centrepiece of the redesign was replacing static text captions with Dynamic Text — bringing animated, expressive captioning to the platform using the same system powering Gboard and YouTube Create. I redesigned the content insertion panel with unified search across stickers, GIFs, clips, and memes, and restructured upload flows into three distinct paths — search-based, gallery-based, and text-only — each optimised for a different creator mode.",
-      },
-    ],
-    outcomes: [
-      { metric: "3", label: "Creator flow options designed (search, gallery, text-only)" },
-      { metric: "0→1", label: "Dynamic Text captioning introduced to Tenor" },
-      { metric: "1", label: "Unified search across all content sources" },
-    ],
-    nextSlug: "google-notes",
-    nextName: "Notes by Google",
-  },
   {
     slug: "google-notes",
     index: "02",
@@ -92,67 +82,78 @@ const PROJECTS: Project[] = [
         label: "01 · Context",
         heading: "A new way to contribute to Search.",
         body: "Notes gives anyone the ability to share helpful tips and perspectives directly on Google Search results and web pages — experts and everyday users alike. For the Creative Content Studio, that created a clear design challenge: every note needed to look visually compelling out of the box, before any personalisation, across a corpus that would grow fast.",
+        points: [
+          "Google's research showed people want to know what others like them say about a page",
+          "Notes sit alongside existing web content — a layer of human insight on top of results",
+          "A \u201cNotes\u201d button below results in the Google app and on Discover articles opens what others have said",
+        ],
+        figure: (
+          <CaseImage
+            src="/notes/case/hero.webp"
+            width={2200}
+            height={916}
+            alt="An illustration of a person holding a loaf of bread, surrounded by phone screens showing a camping article and a grid of colourful, themed notes"
+            caption="Launch illustration for Notes in Search Labs. Image: Google."
+          />
+        ),
       },
       {
         label: "02 · Mission",
         heading: "Themes that elevate the content without overshadowing it.",
         body: "CCS was tasked with creating a theme library wide enough to serve any creator's intent — from a skincare tip to a travel rec to a recipe note. The goal was visual diversity that still felt cohesive: a range of styles broad enough to feel personal, consistent enough to feel like a single product.",
+        split: true,
+        figure: (
+          <PhoneVideo
+            src="/notes/case/browsing-notes.mp4"
+            poster="/notes/case/browsing-notes-poster.webp"
+            width={500}
+            height={1042}
+            label="Screen recording: someone scrolls an article about frosting, then reads a feed of visually themed notes about it"
+            caption="Browsing notes on an article — each theme reads differently, the feed still reads as one product. Recording: Google."
+          />
+        ),
       },
       {
         label: "03 · Core Principles",
         heading: "Effortless creation. Genuine expression.",
         body: "Two principles guided every design decision. Effortless: creating a visually engaging note should require just a few taps — no design skill needed. Expressive: themes should span a genuine range of styles and moods so that creators can find something that actually represents their content, not just a default they tolerate.",
+        split: true,
+        points: [
+          "Text, stickers and photos to build the note",
+          "A choice of visual styles to make it feel like your own",
+          "AI-generated images planned for the U.S. as a next step",
+        ],
+        figure: (
+          <PhoneVideo
+            src="/notes/case/creating-notes.mp4"
+            poster="/notes/case/creating-notes-poster.webp"
+            width={720}
+            height={1500}
+            label="Screen recording: someone writes a note on a baking article, then switches between visual styles and adds stickers before posting"
+            caption="Creating a note — pick a style, add stickers or a photo, post. Recording: Google."
+          />
+        ),
       },
       {
         label: "04 · Development",
         heading: "A Figma plugin that made the system self-serve.",
         body: "The plugin features a unified structure that lets UX designers swap and update theme elements and create new themes independently. On the engineering side, it exports every theme as JSON — preserving every design detail with zero loss in translation. What had been a back-and-forth ticket workflow became a self-serve pipeline for both teams.",
       },
+      {
+        label: "05 · Launch",
+        heading: "Live in Search Labs, built to learn.",
+        body: "Notes launched on November 15, 2023 as an opt-in Search Labs experiment in the Google app on Android and iOS. Like every Labs experiment, the point was to test and learn what works before bringing it to a broader Search audience — with algorithmic protections and human moderation keeping notes safe, helpful and relevant.",
+        points: [
+          "English in the U.S.; Hindi and English in India",
+          "Opt-in through Search Labs in the Google app",
+          "Site-owner insights on notes explored as a follow-up",
+        ],
+      },
     ],
     outcomes: [
       { metric: "0→1", label: "Theming system for Google Search Notes" },
       { metric: "2", label: "Teams unblocked: UX designers + engineers via one plugin" },
       { metric: "100%", label: "Theme export fidelity via JSON — no detail lost in handoff" },
-    ],
-    nextSlug: "google-dynamic-text",
-    nextName: "Dynamic Text",
-  },
-  {
-    slug: "google-dynamic-text",
-    index: "03",
-    company: "C+E Studio · Google",
-    name: "Dynamic Text",
-    tagline: "Typed phrases turned into animated, expressive assets — shipped across Gboard and YouTube Create.",
-    year: "2022–2024",
-    role: "Sr. Product Designer",
-    scope: "Content UX · Localization · Competitive Research · Feature Definition",
-    duration: "2 years",
-    video: "/dynamictext.mp4",
-    image: null,
-    mockups: [],
-    overview:
-      "Dynamic Text is a Creative Content Studio feature that transforms typed phrases into animated, expressive text assets. My work spanned two distinct surfaces — Gboard (the world's most-used mobile keyboard) and YouTube Create — each with different users, contexts, and technical constraints. The challenge was scaling a feature that needed to feel effortless across both.",
-    sections: [
-      {
-        label: "Gboard",
-        heading: "A feature with scale — and gaps to close.",
-        body: "Dynamic Text on Gboard was already shipping, but with real problems: phrases in Spanish and Portuguese failed to activate, spacing and punctuation bugs broke expressions, and character limitations cut off longer phrases. I ran a structured Bug Bash — systematically identifying activation failures, layout breakdowns, and localization gaps — then designed fixes and specs for the Spanish and Portuguese expansion.",
-      },
-      {
-        label: "YouTube Create",
-        heading: "Designing the text effects library from scratch.",
-        body: "YouTube Create had no organized text effects experience at all. I led competitive benchmarking across Lemon8, InStories, Canva, and CapCut to define the UX model. From that research, I designed the tab and pill navigation system for the text effects panel, proposed asset categories (Stylized, Expressive, Creative), introduced motion previews so users could evaluate animated assets in context, and added a Recent section for returning creators.",
-      },
-      {
-        label: "Impact",
-        heading: "Scale that made the numbers real.",
-        body: "The work shipped across both surfaces with measurable results. Dynamic Text became one of the highest-performing content types in the CCS portfolio — driven by a combination of distribution breadth (Gboard's global install base), quality improvements (bug fixes + localization), and a more intuitive discovery experience on YouTube Create.",
-      },
-    ],
-    outcomes: [
-      { metric: "~3.5M", label: "Dynamic Text assets shared per day" },
-      { metric: "78%", label: "Click-Through-Rate on integrated assets" },
-      { metric: "1.2B", label: "Dynamic Text shares in 2023" },
     ],
     nextSlug: "santander",
     nextName: "Santander Digital Help Center",
@@ -162,128 +163,274 @@ const PROJECTS: Project[] = [
     index: "04",
     company: "Santander",
     name: "Digital Help Center",
-    tagline: "Support was branch-first, by default. We changed that.",
+    tagline: "Support was branch-first, by default. We set out to change that.",
     year: "2021",
     role: "UX Designer",
-    scope: "Information Architecture · Web & Mobile · Stakeholder Workshops",
+    scope: "Discovery · Information Architecture · Workshops · User Testing · Salesforce",
     duration: "6 months",
     image: "/project-2.avif",
     overview:
-      "Santander's customer support model defaulted to branch visits and phone calls — even for simple queries that should have resolved themselves digitally. The goal was to design a help center that could absorb that volume: intuitive enough that customers wouldn't need to call, and structured enough that it could scale with Santander's product complexity.",
+      "Santander's Help Center had to move onto Salesforce. I used that integration as a chance to rethink how customers get help — because too many were calling or visiting a branch for things they could have solved on their own.",
+    glance: [
+      { label: "The problem", text: "Customers defaulted to calls and branch visits — even after trying to help themselves online." },
+      { label: "What I did", text: "Research, a co-creation workshop, wireframes and user testing — from discovery to launch." },
+      { label: "Why it matters", text: "An MVP of 80 articles grew into a Help Center with 1,000+ articles and 4M+ visits a quarter." },
+    ],
     sections: [
       {
-        label: "The Problem",
-        heading: "Support by exception — not by design.",
-        body: "Santander's existing help content existed, but it wasn't structured to be found. Navigation was organized around internal product categories, not customer needs. Users called the branch not because they wanted to, but because the digital path to resolution was unclear. The call center was carrying the cost of a bad IA.",
+        act: { label: "Part 1 · The problem", title: "Help existed. People just couldn't get to it." },
+        label: "01 · The challenge",
+        heading: "Fewer contacts. More problems solved without them.",
+        body: "Moving the Help Center onto Salesforce came with a business goal: fewer contacts across every channel, and more customers solving things on their own. The numbers showed how far off that was.",
+        figure: (
+          <KpiCards
+            items={[
+              {
+                tag: "KPI · Target",
+                value: "6.7%",
+                title: "Minimise contactability",
+                text: "Reduce the contact ratio in contact centers and branches — 77,545 fewer contacts a month.",
+                baseline: "Baseline: 1,181,131 contacts a month (2020)",
+              },
+              {
+                tag: "KPI · Starting point",
+                value: "55.6%",
+                title: "Reduce failed self-management",
+                text: "of people who booked a branch appointment online had already tried to solve it themselves.",
+                baseline: "Baseline: 76% self-management contacts a month (2020)",
+              },
+            ]}
+          />
+        ),
+        takeaway: "More than half the people who booked a branch visit had already tried — and failed — to solve it online.",
       },
       {
-        label: "Approach",
-        heading: "Workshops before wireframes.",
-        body: "I ran structured stakeholder workshops across product, compliance, and customer service teams to map the full taxonomy of customer queries. The output wasn't just a sitemap — it was a shared understanding of what customers actually needed to resolve, which had never been formally documented. That research became the IA foundation.",
+        label: "02 · Research",
+        split: true,
+        heading: "What customers do, and what the traffic says.",
+        body: "I interviewed customers who had used the Help Center at least twice, benchmarked Mercado Libre and Despegar, and analysed a year of Help Center traffic.",
+        points: [
+          "Contact details topped the traffic all year — people were looking for a way out, not an answer",
+          "Scheduling a branch visit fell from 4th to 13th; starting a claim climbed from 16th to 10th",
+          "The best help centers lead with one question and a search bar, then a few task-based categories",
+        ],
+        figure: <TrafficChart />,
       },
       {
-        label: "Execution",
-        heading: "Designed for Salesforce. Built to hand off.",
-        body: "The help center was built within Salesforce's constraint set — which shaped the component architecture and content model significantly. I designed both web and mobile variants, maintaining visual consistency while accounting for the different contexts in which customers sought help. The handoff included a content governance framework so the center could stay accurate as products changed.",
+        act: { label: "Part 2 · The process", title: "From findings to a shared direction." },
+        label: "03 · Direction",
+        heading: "Mapping the journey with the whole team.",
+        body: "I facilitated a co-creation workshop with Business, Product, Engineering and UX. Together we mapped where the journey broke, prioritised content, named the product and agreed on the main flow — within Salesforce's technical limits.",
+        figure: (
+          <div className="flex flex-col gap-4">
+            <p className="text-label">The customer journey</p>
+            <JourneyStrip
+              src="/santander/case/journey.png"
+              width={1774}
+              height={440}
+              alt="Illustrated customer journey: a customer with a question, the Help Center, being routed to phone, branch, chat or email, getting lost in articles, the impact on contacts and operations, and finally a clear answer"
+              steps={[
+                { title: "A simple question", text: "Book a branch visit, find a document.", share: 330 },
+                { title: "The Help Center", text: "Search and categories — but answers are scattered.", share: 290 },
+                { title: "Routed out", text: "Phone, branch, chat or email.", share: 300 },
+                { title: "Lost in articles", text: "Long content, still unsure what to do.", share: 300 },
+                { title: "The business side", text: "Contact volume, operations and teams.", share: 260 },
+                { title: "Clarity", text: "The answer — without having to call.", share: 270 },
+              ]}
+            />
+          </div>
+        ),
+        takeaway: "The gap wasn't missing content — it was the path between a question and its answer.",
+      },
+      {
+        label: "04 · Design",
+        heading: "Search first, then the shortest path to an answer.",
+        body: "I sketched the experience in low fidelity and iterated with the same group. Every page opens with one question and a search bar, then the most-consulted categories, with every other topic one tap away. Search surfaces self-service actions before articles, so people can act instead of just reading.",
+        figure: (
+          <CaseImage
+            src="/santander/case/wireframes-help-center.png"
+            width={1774}
+            height={887}
+            alt="Two grayscale wireframes of the Help Center: the home with a search bar, most-consulted categories and other categories; and a category page for Cuentas y Tarjetas with a side menu, featured articles and more articles"
+            caption="Home and category page — search first, the most-consulted categories up top, every other category one tap away."
+          />
+        ),
+      },
+      {
+        act: { label: "Part 3 · The outcome", title: "Validated, launched — and still growing." },
+        label: "05 · Testing",
+        heading: "Five customers, one end-to-end flow.",
+        body: "I tested the MVP with five customers, including an A/B test on the product's name.",
+        figure: (
+          <TestingScorecard
+            passed={[
+              { text: "Found the entry point" },
+              { text: "Navigated the IA without friction" },
+              { text: "Completed the flow end to end", score: 5 },
+            ]}
+            learned={[
+              { text: "Keep the name “Help Center” (A/B test)" },
+              { text: "Expect to schedule a branch visit from it", score: 5 },
+            ]}
+          />
+        ),
+        takeaway: "Every participant found the entry point and finished the flow — and all five wanted to book branch visits from it.",
+      },
+      {
+        label: "06 · Launch",
+        heading: "Employees first, then customers.",
+        body: "The new Help Center launched to Santander's own employees first — to catch pain points, fix inconsistencies with Flame (Santander's design system) and bring in flows other squads had already automated. It also checks back on a customer's last query.",
+      },
+      {
+        label: "07 · Three years later",
+        heading: "From an 80-article test to a product the bank runs on.",
+        body: "The MVP started small: 80 informational articles, with support routed by customer type and query. It worked — and showed we were on the right track. Three years and many challenges later, the Help Center lives across the bank's digital channels. Most recently, we launched a Help Center Backoffice: an internal tool to create, edit and retire content, with request inboxes for every area of the bank — so the product can sustain itself over time.",
+        figure: (
+          <GrowthStats
+            from={{ value: "80", label: "informational articles" }}
+            to={{ value: "1,000+", label: "articles" }}
+            stats={[
+              { value: "140", label: "self-service flows" },
+              { value: "4M+", label: "visits every quarter" },
+            ]}
+            channels={["Mobile app", "Online Banking · Personal", "Online Banking · Business", "Public website"]}
+          />
+        ),
+        takeaway: "The key isn't creating something — it's making it work, and making sure it gets used.",
       },
     ],
     outcomes: [
-      { metric: "6.7%", label: "Reduction in contact ratio — 77,545 fewer contacts/month" },
-      { metric: "0→1", label: "Digital help center designed from blank canvas" },
-      { metric: "2", label: "Platforms covered: web and mobile" },
+      { metric: "1,000+", label: "Help Center articles — grown from an 80-article MVP" },
+      { metric: "140", label: "Self-service flows" },
+      { metric: "4M+", label: "Visits every quarter" },
     ],
     nextSlug: "quentro",
-    nextName: "Quentro Event Ticketing",
+    nextName: "Quentro Ticket Activation",
   },
   {
+    /* Rendered by <QuentroCaseStudy />; this entry keeps it in the next-project chain */
     slug: "quentro",
     index: "05",
     company: "Quentro",
-    name: "Event Ticketing App",
-    tagline: "Most users never made it past the first screen. We fixed that.",
+    name: "Quentro Ticket Activation",
+    tagline: "Simplifying ticket activation without compromising security.",
     year: "2019",
-    role: "UX Designer",
-    scope: "Mobile UX · Onboarding · Usability Testing",
+    role: "Product Designer",
+    scope: "User Research · Customer Journey · UX Design · Service Design",
     duration: null,
-    image: null,
-    mockups: [
-      "/quentro/screen.png",
-      "/quentro/walk-1.png",
-      "/quentro/walk-3.png",
-      "/quentro/walk-4.png",
-    ],
-    features: [
-      {
-        label: "Store",
-        heading: "All your tickets, right where you need them.",
-        body: "When you buy tickets, select Quentro as the delivery method. Your tickets are credited instantly in the app, stored securely until the day of the event — no printing, no searching through email, no last-minute panic.",
-        image: "/quentro/walk-1.png",
-      },
-      {
-        label: "Transfer",
-        heading: "Share tickets in seconds, not steps.",
-        body: "The person who buys doesn't have to be the person who goes. With Quentro, transferring a ticket to any contact is a single tap — no printing, no forwarding PDFs, no meeting up in person just to hand off a barcode.",
-        image: "/quentro/walk-3.png",
-      },
-      {
-        label: "Notifications",
-        heading: "No more day-of surprises.",
-        body: "Changes happen. Quentro sends real-time updates when event details shift — door times, stage schedules, access gates. You always know before you go, so nothing catches you off guard at the venue.",
-        image: "/quentro/walk-4.png",
-      },
-    ],
     overview:
-      "Quentro is an event ticketing app for a generation that discovers events through social feeds, not search bars. The product had traction — but first-use abandonment was high, and the onboarding flow was losing users before they ever saw the value. We had to diagnose before we could fix.",
-    sections: [
-      {
-        label: "The Problem",
-        heading: "High intent, high abandonment.",
-        body: "Users were installing Quentro — but leaving before completing their first action. Session recordings showed a pattern: confusion at onboarding, friction in the event discovery flow, and a gap between the app's promise (effortless ticketing) and the actual experience (too many steps, unclear value).",
-      },
-      {
-        label: "Approach",
-        heading: "Usability testing first. Solutions second.",
-        body: "I ran moderated usability sessions with 8 users across the target demographic. The findings were specific: the onboarding asked too much before giving anything back, and the event cards didn't surface the right information at the right moment. Knowing exactly where users dropped out made the redesign precise rather than speculative.",
-      },
-      {
-        label: "Execution",
-        heading: "Rethinking the first 60 seconds.",
-        body: "The redesign focused on two areas: a progressive onboarding flow that led with value (show events first, ask for preferences second), and a restructured event card that put price, distance, and date in the visual hierarchy users actually needed. The result reduced perceived friction without removing necessary steps.",
-      },
-    ],
-    outcomes: [
-      { metric: "↓", label: "First-use abandonment reduced post-redesign" },
-      { metric: "8", label: "Moderated usability sessions conducted" },
-      { metric: "2", label: "Core flows rebuilt: onboarding + event discovery" },
-    ],
-    nextSlug: "tenor-caption",
-    nextName: "Tenor Creator Experience",
+      "Research revealed that the problem wasn't a single interaction — it was the accumulation of friction across the entire ticket activation journey.",
+    sections: [],
+    outcomes: [],
+    nextSlug: "google-notes",
+    nextName: "Notes by Google",
   },
 ];
 
 /* ─── Page component ───────────────────────────────────────────── */
+/* Chapter opener for a part of the story: its number, title and the sections inside it */
+function ActOpener({ sections, index }: { sections: Project["sections"]; index: number }) {
+  const act = sections[index].act!;
+  const actNumber = sections.slice(0, index + 1).filter((section) => section.act).length;
+  const actCount = sections.filter((section) => section.act).length;
+  const nextAct = sections.findIndex((section, j) => j > index && section.act);
+  const inside = sections.slice(index, nextAct === -1 ? undefined : nextAct);
+  const firstNumber = index + 1;
+
+  return (
+    <div className="mb-16 grid grid-cols-1 gap-8 rounded-[20px] border border-border bg-bg-raised px-6 py-8 text-text-primary sm:px-10 sm:py-12 lg:mb-20 lg:grid-cols-[1fr_2fr] lg:items-end lg:gap-8">
+      <div className="flex flex-col gap-2">
+        <span className="font-medium leading-none tracking-[-0.05em] text-[clamp(3.5rem,7vw,6rem)] text-text-muted tabular-nums">
+          {String(actNumber).padStart(2, "0")}
+        </span>
+        <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-text-secondary">
+          Part {actNumber} of {actCount} · {act.label.replace(/^Part \d+ · /, "")}
+        </span>
+      </div>
+      <div className="flex flex-col gap-6">
+        <h2
+          className="max-w-[22ch] font-medium leading-[1.05] tracking-[-0.035em]"
+          style={{ fontSize: "clamp(1.75rem, 3.2vw, 2.75rem)" }}
+        >
+          {act.title}
+        </h2>
+        <ol className="flex flex-wrap gap-2" role="list">
+          {inside.map((section, k) => (
+            <li key={section.label}>
+              <a
+                href={`#case-section-${index + k}`}
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-bg-base px-3 py-1.5 text-[13px] text-text-secondary transition-colors duration-200 hover:border-text-muted hover:text-text-primary"
+              >
+                <span className="tabular-nums text-text-muted">{String(firstNumber + k).padStart(2, "0")}</span>
+                {chapterLabel(section.label)}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  );
+}
+
+/* Body text + optional points for a case study section */
+function sectionBody(section: Project["sections"][number]) {
+  return (
+    <div className="max-w-[64ch]">
+      <p className="text-text-secondary leading-relaxed" style={{ fontSize: "1.0625rem" }}>
+        {section.body}
+      </p>
+      {section.points && (
+        <ul className="mt-6 border-t border-border" role="list">
+          {section.points.map((point) => (
+            <li key={point} className="flex gap-3 border-b border-border py-3 text-[15px] leading-relaxed text-text-primary">
+              <span className="text-text-muted" aria-hidden="true">—</span>
+              {point}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 export default function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
+  const upcoming = UPCOMING_CASE_STUDIES.find((p) => p.slug === slug);
+  if (upcoming) return <UpcomingCaseStudy project={upcoming} />;
+
   const project = PROJECTS.find((p) => p.slug === slug);
   if (!project) notFound();
 
   const nextProject = PROJECTS.find((p) => p.slug === project.nextSlug);
 
+  if (project.slug === "quentro") {
+    return <QuentroCaseStudy nextSlug={nextProject?.slug} nextName={nextProject ? project.nextName : undefined} />;
+  }
+
+  const chapters = [
+    { id: "case-intro", label: "Introduction" },
+    { id: "case-overview", label: "Overview" },
+    ...project.sections.map((section, i) => ({ id: `case-section-${i}`, label: chapterLabel(section.label) })),
+    ...(nextProject ? [{ id: "case-next", label: "Next project" }] : []),
+  ];
+
   return (
     <div className="min-h-screen">
+      <CaseStudyProgress project={project.name} chapters={chapters} />
+
       {/* ── Hero ── */}
-      <div className="container-editorial pt-36 pb-16">
+      <div id="case-intro" className="container-editorial scroll-mt-32 pt-40 pb-16 md:pt-36">
         <div className="animate-fade-up">
           <p className="text-label mb-6">
             {project.company} · {project.year}
           </p>
         </div>
         <h1
-          className="text-text-primary font-bold animate-fade-up animate-fade-up-1"
+          className="text-text-primary font-medium animate-fade-up animate-fade-up-1"
           style={{
-            fontSize: "clamp(2.5rem, 6vw, 6rem)",
-            letterSpacing: "-0.04em",
-            lineHeight: 0.94,
+            fontSize: "clamp(2.5rem, 5.6vw, 5.5rem)",
+            letterSpacing: "-0.05em",
+            lineHeight: 0.98,
           }}
         >
           {project.name}
@@ -326,7 +473,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
                 className="border border-border rounded-xl px-6 py-5 bg-bg-surface"
               >
                 <p
-                  className="gradient-text font-bold mb-1.5"
+                  className="gradient-text font-medium mb-1.5"
                   style={{ fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)", letterSpacing: "-0.04em", lineHeight: 1 }}
                 >
                   {outcome.metric}
@@ -438,7 +585,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
                   <div className="flex flex-col gap-5">
                     <p className="text-label">{feature.label}</p>
                     <h2
-                      className="text-text-primary font-bold leading-tight"
+                      className="text-text-primary font-medium leading-tight"
                       style={{ fontSize: "clamp(1.5rem, 3vw, 2.5rem)", letterSpacing: "-0.03em" }}
                     >
                       {feature.heading}
@@ -469,28 +616,30 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
         </div>
       )}
 
-      {/* ── Process phases ── */}
-      <div className="container-editorial pb-16">
-        <hr className="hairline mb-10" />
-        <Reveal>
-          <div className="flex flex-wrap items-center gap-3">
-            <p className="text-label shrink-0">Process</p>
-            <div className="flex flex-wrap items-center gap-2">
-              {project.sections.map((section, i) => (
-                <span key={i} className="flex items-center gap-2">
-                  {i > 0 && <span className="text-text-muted text-xs" aria-hidden="true">→</span>}
-                  <span className="text-xs px-3 py-1.5 rounded-full border border-border text-text-secondary">
-                    {section.label}
+      {/* ── Process pills (case studies without a story map) ── */}
+      {!project.sections.some((section) => section.act) && (
+        <div className="container-editorial pb-16">
+          <hr className="hairline mb-10" />
+          <Reveal>
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="text-label shrink-0">Process</p>
+              <div className="flex flex-wrap items-center gap-2">
+                {project.sections.map((section, i) => (
+                  <span key={i} className="flex items-center gap-2">
+                    {i > 0 && <span className="text-text-muted text-xs" aria-hidden="true">→</span>}
+                    <span className="text-xs px-3 py-1.5 rounded-full border border-border text-text-secondary">
+                      {section.label}
+                    </span>
                   </span>
-                </span>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        </Reveal>
-      </div>
+          </Reveal>
+        </div>
+      )}
 
       {/* ── Overview ── */}
-      <div className="container-editorial pb-24">
+      <div id="case-overview" className="container-editorial scroll-mt-32 pb-24">
         <hr className="hairline mb-16" />
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_2fr]">
           <Reveal>
@@ -507,35 +656,75 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
         </div>
       </div>
 
+      {/* ── At a glance + story map ── */}
+      {project.glance && (
+        <div className="container-editorial flex flex-col gap-6 pb-32">
+          <Reveal>
+            <AtAGlance items={project.glance} />
+          </Reveal>
+        </div>
+      )}
+
       {/* ── Sections ── */}
-      <motion.div
-        className="container-editorial pb-24 flex flex-col gap-24"
-        variants={stagger(0.1)}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "200px 0px 0px 0px" }}
-      >
+      <div className="container-editorial flex flex-col pb-24">
         {project.sections.map((section, i) => (
-          <motion.div
-            key={i}
-            variants={fadeUp}
-            className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_2fr]"
-          >
-            <div>
-              <p className="text-label mb-3">{section.label}</p>
-              <h2
-                className="text-text-primary font-bold leading-tight"
-                style={{ fontSize: "clamp(1.25rem, 2.5vw, 2rem)", letterSpacing: "-0.03em" }}
+          <div key={i}>
+            {section.act && (
+              <Reveal className={i === 0 ? "" : "pt-24 lg:pt-32"}>
+                <ActOpener sections={project.sections} index={i} />
+              </Reveal>
+            )}
+            <motion.section
+              id={`case-section-${i}`}
+              aria-labelledby={`case-section-${i}-title`}
+              className={`scroll-mt-32 ${
+                section.act || i === 0 ? "" : "mt-16 border-t border-border pt-16 lg:mt-20 lg:pt-20"
+              }`}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "0px 0px -10% 0px" }}
+            >
+              <div
+                className={`grid grid-cols-1 gap-6 lg:gap-8 ${
+                  section.split ? "lg:grid-cols-[5fr_7fr] lg:items-center lg:gap-14" : "lg:grid-cols-[1fr_2fr]"
+                }`}
               >
-                {section.heading}
-              </h2>
-            </div>
-            <p className="text-text-secondary leading-relaxed" style={{ fontSize: "1.0625rem" }}>
-              {section.body}
-            </p>
-          </motion.div>
+                <div className={section.split ? "flex flex-col gap-6" : undefined}>
+                  <div>
+                    <p className="text-label mb-3">{section.label}</p>
+                  <h3
+                    id={`case-section-${i}-title`}
+                    className="text-text-primary font-medium leading-tight"
+                    style={{ fontSize: "clamp(1.25rem, 2.2vw, 1.75rem)", letterSpacing: "-0.03em" }}
+                  >
+                    {section.heading}
+                  </h3>
+                  </div>
+                  {section.split && sectionBody(section)}
+                </div>
+                {section.split ? (
+                  section.figure
+                ) : (
+                  sectionBody(section)
+                )}
+              </div>
+              {!section.split && section.figure && <div className="mt-10 lg:mt-12">{section.figure}</div>}
+              {section.takeaway && (
+                <div className="mt-10 grid grid-cols-1 gap-3 lg:mt-12 lg:grid-cols-[1fr_2fr] lg:gap-8">
+                  <p className="text-label pt-1.5">Takeaway</p>
+                  <p
+                    className="max-w-[44ch] border-l-2 border-text-primary pl-5 font-medium leading-snug tracking-[-0.02em] text-text-primary"
+                    style={{ fontSize: "clamp(1.25rem, 2vw, 1.625rem)" }}
+                  >
+                    {section.takeaway}
+                  </p>
+                </div>
+              )}
+            </motion.section>
+          </div>
         ))}
-      </motion.div>
+      </div>
 
       {/* ── Themes grid ── */}
       {"themesGridImage" in project && project.themesGridImage && (
@@ -586,7 +775,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
                 rel="noopener noreferrer"
                 className="text-sm text-text-secondary hover:text-accent transition-colors duration-200"
               >
-                How to try Notes: New Google Search Labs experiment →
+                Try Notes, a new experiment in Search Labs — Google Blog, Nov 2023 →
               </a>
             </div>
           </Reveal>
@@ -595,7 +784,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
 
       {/* ── Next project ── */}
       {nextProject && (
-        <div className="border-t border-border">
+        <div id="case-next" className="border-t border-border">
           <Link
             href={`/work/${project.nextSlug}`}
             className="group container-editorial flex items-center justify-between py-16 transition-colors duration-200"
@@ -604,7 +793,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
             <div>
               <p className="text-label mb-2">Next project</p>
               <p
-                className="text-text-primary font-bold group-hover:text-accent transition-colors duration-300"
+                className="text-text-primary font-medium group-hover:text-accent transition-colors duration-300"
                 style={{ fontSize: "clamp(1.25rem, 3vw, 2.5rem)", letterSpacing: "-0.03em" }}
               >
                 {project.nextName}
